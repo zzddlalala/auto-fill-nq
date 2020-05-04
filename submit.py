@@ -4,8 +4,9 @@ from random import randint
 
 from requests_html import HTMLSession
 
-from configs import (QUESTION_ID, QUESTION_URL, POST_URL_MAP,
-                     QUESTION_INFO, ANSWER_TIMES)
+from configs import (QUESTION_ID, QUESTION_URL, POST_URL_MAP, ANSWER_TIMES)
+
+from question import (radio, checkBox)
 
 
 def parse_post_url(resp):
@@ -35,14 +36,22 @@ def parse_post_data(resp):
 
     for i, q in enumerate(questions):
         title = q.find('.div_title_question_all', first=True).text
-        choices = [t.text for t in q.find('label')]
-        random_index = randint(0, len(choices) - 1)
-        choice = choices[random_index]
-        post_data['submitdata'] += '{}${}}}'.format(i+1, random_index+1)
-        print(QUESTION_INFO.format(title, choices, choice))
+        print('题目:{}'.format(title))
+        
+        answer = ''
+        question_class = q.find('a', first=True).attrs['class'][0]
+        if question_class == 'jqRadio':
+            answer = radio(q)
+        elif question_class == 'jqCheckbox':
+            answer = checkBox(q)
+            
+        post_data['submitdata'] += '{}${}}}'.format(i+1, answer)
         time.sleep(0.5)
+
     # 去除最后一个不合法的`}`
     post_data['submitdata'] = post_data['submitdata'][:-1]
+    print(post_data)
+
     return post_data
 
 
@@ -51,23 +60,19 @@ def post_answer(session, url, data):
     提交答案
     '''
     r = session.post(url, data)
-    print('提交状态：{}'.format(r.status_code))
+    print('提交返回结果:{}'.format(r.text))
 
 
 def simulate_survey():
     '''
     模拟回答问卷
     '''
-    print('questionUrl{}'.format(QUESTION_URL))
 
     session = HTMLSession()
     resp = session.get(QUESTION_URL)
     url = parse_post_url(resp)
     data = parse_post_data(resp)
-    print('构造请求session{},url{},data{}'.format(session,url,data))
-
     post_answer(session, url, data)
-
 
 
 def main():
