@@ -1,8 +1,11 @@
 import time
 from datetime import datetime
-from random import randint
-
+from random import (randint, choice)
+import urllib.request
+import requests
+import re
 from requests_html import HTMLSession
+from fake_useragent import UserAgent
 
 from configs import (QUESTION_ID, QUESTION_URL, POST_URL_MAP, ANSWER_TIMES)
 
@@ -55,12 +58,44 @@ def parse_post_data(resp):
     return post_data
 
 
+def get_ip():
+    headers = {
+        'User-Agent': UserAgent().random
+    }
+    html = urllib.request.Request(url='https://www.xicidaili.com/nn/', headers = headers)
+    html = urllib.request.urlopen(html).read().decode('utf-8')
+    reg = r'<td>(.+?)</td>'
+    reg = re.compile(reg)
+    pools = re.findall(reg, html)[0:499:5]
+    Random_IP = choice(pools)
+    return Random_IP
+
+
+def get_headers(User_Agent, Virtual_ip):
+    headers = {  # 如果一直不成功可以重新抓包更换一下coookie
+        'Host': 'www.wjx.cn',
+        'User-Agent': User_Agent,  # 随机浏览器标识
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'Referer': 'https://www.wjx.cn/jq/'+str(QUESTION_ID)+'.aspx',
+        'Cookie': 'acw_tc=2f624a2715707742490114846e11af314ae7a232ed18707c9ed7d7796002c8; .ASPXANONYMOUS=aD0md4y21QEkAAAANmIzNGIzNDEtNDk4OS00MjNjLTg5YTItMjU2YWIwMTdkZGM4_qytsxBWi11-sOz1HwVnB_Y516Q1; jac47027148=19962282; %26ntime%3D1570771906; Hm_lvt_21be24c80829bd7a683b2c536fcf520b=1570774251; Hm_lpvt_21be24c80829bd7a683b2c536fcf520b=1570774251; jpckey=%u5927%u5B66%u751F',  # 这里的cookie，自己提交一遍再抓包，提取出cookie
+        'X-Forwarded-For': Virtual_ip  # 随机获取的ip
+    }
+    return headers
+
+
 def post_answer(session, url, data):
     '''
     提交答案
     '''
-    r = session.post(url, data)
-    print('提交返回结果:{}'.format(r.text))
+    User_Agent = UserAgent().random  # 随机生成User-Agent
+    Virtual_ip = get_ip()
+    headers = get_headers(User_Agent, Virtual_ip)
+    r = requests.Request('POST', url, data=data)
+    prepared = r.prepare()
+    print('prepared{}'.format(prepared.__dict__))
+    s = requests.Session()
+    resp = s.send(prepared, verify=False)
+    print('提交返回结果:{}'.format(resp.text))
 
 
 def simulate_survey():
@@ -71,6 +106,8 @@ def simulate_survey():
     session = HTMLSession()
     resp = session.get(QUESTION_URL)
     url = parse_post_url(resp)
+    print(url)
+    return
     data = parse_post_data(resp)
     post_answer(session, url, data)
 
