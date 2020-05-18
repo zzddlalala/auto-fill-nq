@@ -182,7 +182,7 @@ class WenJuanXing:
                 ip_url = IP_URL + str(i // 100 + 1)
                 print(ip_url)
                 pools = self.Get_IP(ip_url)
-            time.sleep(0.1)
+            time.sleep(2)
             self.run(pools)
             print('第{}次'.format(i+1))
 
