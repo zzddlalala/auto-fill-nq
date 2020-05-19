@@ -7,7 +7,7 @@ import fake_useragent
 import os
 import method
 import ssl
-from init import (ID, WJX_URL, ANSWER_TIMES, IP_URL, MODE)
+from init import (ID, WJX_URL, ANSWER_TIMES, IP_URL, MODE,SUCCESS_TIMES)
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
@@ -160,6 +160,10 @@ class WenJuanXing:
         """
         self.set_data()
         response = requests.post(url=self.post_url, data=self.data, headers=self.header, cookies=self.cookie)
+        #成功次数累加
+        global SUCCESS_TIMES
+        if response.content.decode()[0:2] == '10':
+            SUCCESS_TIMES+=1
         return response
 
     def run(self, ip_pools):
@@ -190,3 +194,4 @@ class WenJuanXing:
 if __name__ == '__main__':
     w = WenJuanXing(WJX_URL)
     w.mul_run(ANSWER_TIMES)
+    print('成功{}次'.format(SUCCESS_TIMES))

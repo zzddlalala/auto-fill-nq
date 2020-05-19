@@ -71,7 +71,12 @@ def probability_data():
             exit()
         post_data['submitdata'] += '{}${}}}'.format(i + 1, index)
 
-    post_data['submitdata'] = post_data['submitdata'][:-1]
+    #post_data['submitdata'] = post_data['submitdata'][:-1]
+    post_data['submitdata'] += '11'+'$'+''
+    print(post_data['submitdata'])
+    post_data['submitdata']=post_data['submitdata'][:10]+post_data['submitdata'][11:]
+    print(post_data['submitdata'])
+
     return post_data
 
 
