@@ -2,6 +2,7 @@ import random
 from requests_html import HTMLSession
 from random import randint
 from init import (WJX_URL, QUESTION_TYPE, SELECTION_COUNT, SELECTION_PORBABILITY)
+from urllib.parse import quote,unquote
 
 def probability_index(rate):
     start = 0
@@ -25,7 +26,6 @@ def random_data():
 
     for i, q in enumerate(questions):
         choices = [t.text for t in q.find('label')]
-
         questions_type = q.find('a', first=True).attrs['class'][0]
         random_index = 1
         if questions_type == 'jqRadio':
@@ -38,6 +38,7 @@ def random_data():
         post_data['submitdata'] += '{}${}}}'.format(i + 1, random_index)
     # 去除最后一个不合法的`}`
     post_data['submitdata'] = post_data['submitdata'][:-1]
+    print(post_data['submitdata'])
     return post_data
 
 def probability_data():
@@ -72,10 +73,11 @@ def probability_data():
         post_data['submitdata'] += '{}${}}}'.format(i + 1, index)
 
     #post_data['submitdata'] = post_data['submitdata'][:-1]
-    post_data['submitdata'] += '11'+'$'+''
+    post_data['submitdata'] += '9'+'$'+'暂无'
     print(post_data['submitdata'])
-    post_data['submitdata']=post_data['submitdata'][:10]+post_data['submitdata'][11:]
-    print(post_data['submitdata'])
+
+    #post_data['submitdata']=post_data['submitdata'][:10]+post_data['submitdata'][11:]
+    #print(post_data['submitdata'])
 
     return post_data
 
