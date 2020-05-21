@@ -1,7 +1,7 @@
 import random
 from requests_html import HTMLSession
 from random import randint
-from init import (WJX_URL, QUESTION_TYPE, SELECTION_COUNT, SELECTION_PORBABILITY)
+from init import (WJX_URL, QUESTION_TYPE, SELECTION_COUNT, SELECTION_PORBABILITY,answer1,answer2)
 from urllib.parse import quote,unquote
 
 def probability_index(rate):
@@ -72,8 +72,13 @@ def probability_data():
             exit()
         post_data['submitdata'] += '{}${}}}'.format(i + 1, index)
 
-    #post_data['submitdata'] = post_data['submitdata'][:-1]
-    post_data['submitdata'] += '9'+'$'+'暂无'
+    post_data['submitdata'] = post_data['submitdata'][:-1]
+    #random_index1 = randint(0, len(answer1)-1)
+    #random_index2 = randint(1, len(answer2)-1)
+    #anser15=answer1[random_index1]
+    #anser16=answer2[random_index2]
+
+    #post_data['submitdata'] += '15$'+anser15
     print(post_data['submitdata'])
 
     #post_data['submitdata']=post_data['submitdata'][:10]+post_data['submitdata'][11:]
