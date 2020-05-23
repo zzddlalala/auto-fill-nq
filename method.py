@@ -70,9 +70,14 @@ def probability_data():
         else:
             print('题目单选多选类型填写不对')
             exit()
-        post_data['submitdata'] += '{}${}}}'.format(i + 1, index)
 
-    post_data['submitdata'] = post_data['submitdata'][:-1]
+        if i<9:
+            d=i+1
+        if i>=9:
+            d=i-9
+        post_data['submitdata'] += '{},{}}}'.format(d + 1, index)
+
+    #post_data['submitdata'] = post_data['submitdata'][:-1]
     #random_index1 = randint(0, len(answer1)-1)
     #random_index2 = randint(1, len(answer2)-1)
     #anser15=answer1[random_index1]
@@ -81,8 +86,8 @@ def probability_data():
     #post_data['submitdata'] += '15$'+anser15
     print(post_data['submitdata'])
 
-    #post_data['submitdata']=post_data['submitdata'][:10]+post_data['submitdata'][11:]
-    #print(post_data['submitdata'])
+    post_data['submitdata']='1$'+post_data['submitdata'][:35]+'}2$'+post_data['submitdata'][36:]
+    print(post_data['submitdata'])
 
     return post_data
 
