@@ -1,8 +1,7 @@
 import random
 from requests_html import HTMLSession
 from random import randint
-from init import (WJX_URL, QUESTION_TYPE, SELECTION_COUNT, SELECTION_PORBABILITY,answer1,answer2)
-from urllib.parse import quote,unquote
+from init import (WJX_URL, QUESTION_TYPE, SELECTION_COUNT, SELECTION_PORBABILITY)
 
 def probability_index(rate):
     start = 0
@@ -25,7 +24,23 @@ def random_data():
     post_data = {'submitdata': ""}
 
     for i, q in enumerate(questions):
+
+
+        if i == 15:
+            post_data['submitdata'] += '16' + '$'
+            break
+
+
+        '''
+        if i == 23:
+            post_data['submitdata'] += '24' + '$' + '}'
+            continue
+        if i == 24:
+            post_data['submitdata'] += '25' + '$' + ''
+            break
+        '''
         choices = [t.text for t in q.find('label')]
+
         questions_type = q.find('a', first=True).attrs['class'][0]
         random_index = 1
         if questions_type == 'jqRadio':
@@ -37,11 +52,13 @@ def random_data():
 
         post_data['submitdata'] += '{}${}}}'.format(i + 1, random_index)
     # 去除最后一个不合法的`}`
-    post_data['submitdata'] = post_data['submitdata'][:-1]
+    #post_data['submitdata'] = post_data['submitdata'][:-1]
     print(post_data['submitdata'])
+
     return post_data
 
 def probability_data():
+
     post_data = {'submitdata': ""}
     if len(QUESTION_TYPE) != len(SELECTION_COUNT) or len(SELECTION_PORBABILITY) != len(SELECTION_COUNT):
         print('数据填写有误，请检查后重新填写')
@@ -66,23 +83,21 @@ def probability_data():
                 choices.append(option)
             choices = list(set(choices))
             index = '|'.join(list(map(str, choices)))
-
+        #填空
+        elif QUESTION_TYPE[i] == 3:
+            if len(SELECTION_PORBABILITY[i])==0:
+                 index=''
+            else:
+                random_index = randint(0, len(SELECTION_PORBABILITY[i])-1)
+                index=SELECTION_PORBABILITY[i][random_index]
         else:
             print('题目单选多选类型填写不对')
             exit()
         post_data['submitdata'] += '{}${}}}'.format(i + 1, index)
 
     post_data['submitdata'] = post_data['submitdata'][:-1]
-    #random_index1 = randint(0, len(answer1)-1)
-    #random_index2 = randint(1, len(answer2)-1)
-    #anser15=answer1[random_index1]
-    #anser16=answer2[random_index2]
-
-    #post_data['submitdata'] += '15$'+anser15
+    #post_data['submitdata'] += '5'+'$'+'-3}'
     print(post_data['submitdata'])
-
-    #post_data['submitdata']=post_data['submitdata'][:10]+post_data['submitdata'][11:]
-    #print(post_data['submitdata'])
 
     return post_data
 
