@@ -25,12 +25,6 @@ def random_data():
 
     for i, q in enumerate(questions):
 
-
-        if i == 15:
-            post_data['submitdata'] += '16' + '$'
-            break
-
-
         '''
         if i == 23:
             post_data['submitdata'] += '24' + '$' + '}'
@@ -52,7 +46,7 @@ def random_data():
 
         post_data['submitdata'] += '{}${}}}'.format(i + 1, random_index)
     # 去除最后一个不合法的`}`
-    #post_data['submitdata'] = post_data['submitdata'][:-1]
+    post_data['submitdata'] = post_data['submitdata'][:-1]
     print(post_data['submitdata'])
 
     return post_data
