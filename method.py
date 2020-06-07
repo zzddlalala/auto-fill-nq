@@ -85,13 +85,25 @@ def probability_data():
             else:
                 random_index = randint(0, len(SELECTION_PORBABILITY[i])-1)
                 index=SELECTION_PORBABILITY[i][random_index]
+
+        #特别
+        elif QUESTION_TYPE[i] == 4:
+            if len(SELECTION_PORBABILITY[i]) != SELECTION_COUNT[i]:
+                print('选项数量和所填的概率对不上')
+                exit()
+            choices = []
+            for j in range(4):
+                option = probability_index(SELECTION_PORBABILITY[i]) + 1
+                choices.append(option)
+            choices = list(set(choices))
+            index = ','.join(list(map(str, choices)))
         else:
             print('题目单选多选类型填写不对')
             exit()
         post_data['submitdata'] += '{}${}}}'.format(i + 1, index)
 
     post_data['submitdata'] = post_data['submitdata'][:-1]
-    #post_data['submitdata'] += '5'+'$'+'-3}'
+    post_data['submitdata'] += ',-2,-2,-2,-2'
     print(post_data['submitdata'])
 
     return post_data
