@@ -24,7 +24,7 @@ def random_data():
     post_data = {'submitdata': ""}
 
     for i, q in enumerate(questions):
-
+        '''
         if i == 6:
             post_data['submitdata'] += '7' + '$' + '}'
             continue
@@ -34,6 +34,7 @@ def random_data():
         if i == 24:
             post_data['submitdata'] += '25' + '$' + '}'
             break
+        '''
         choices = [t.text for t in q.find('label')]
 
         questions_type = q.find('a', first=True).attrs['class'][0]
