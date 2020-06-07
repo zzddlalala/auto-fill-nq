@@ -103,7 +103,7 @@ def probability_data():
         post_data['submitdata'] += '{}${}}}'.format(i + 1, index)
 
     post_data['submitdata'] = post_data['submitdata'][:-1]
-    post_data['submitdata'] += ',-2,-2,-2,-2'
+    #post_data['submitdata'] += ',-2,-2,-2,-2'
     print(post_data['submitdata'])
 
     return post_data
