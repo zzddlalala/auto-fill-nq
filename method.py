@@ -79,6 +79,10 @@ def probability_data():
                 choices.append(option)
             choices = list(set(choices))
             index = '|'.join(list(map(str, choices)))
+        #排序
+        elif QUESTION_TYPE[i] == 2:
+            random.shuffle(SELECTION_PORBABILITY[i])
+            index=','.join(SELECTION_PORBABILITY[i])
         #填空
         elif QUESTION_TYPE[i] == 3:
             if len(SELECTION_PORBABILITY[i])==0:
