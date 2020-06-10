@@ -13,6 +13,13 @@ def probability_index(rate):
             break
     return index
 
+def multi_check(rate):
+    randnum=randint(1,100)
+    if randnum <= rate:
+        return True 
+    else:
+        return False
+        
 def random_data():
     """
             这个函数中生成问卷的结果，可根据问卷结果，随机生成答案
@@ -74,15 +81,17 @@ def probability_data():
                 print('选项数量和所填的概率对不上')
                 exit()
             choices = []
-            for j in range(randint(1, SELECTION_COUNT[i])):
-                option = probability_index(SELECTION_PORBABILITY[i]) + 1
-                choices.append(option)
+            for j in range(SELECTION_COUNT[i]):
+                if multi_check(SELECTION_PORBABILITY[i][j]):
+                    choices.append(j+1)
             choices = list(set(choices))
             index = '|'.join(list(map(str, choices)))
+
         #排序
         elif QUESTION_TYPE[i] == 2:
             random.shuffle(SELECTION_PORBABILITY[i])
             index=','.join(SELECTION_PORBABILITY[i])
+
         #填空
         elif QUESTION_TYPE[i] == 3:
             if len(SELECTION_PORBABILITY[i])==0:
@@ -91,17 +100,6 @@ def probability_data():
                 random_index = randint(0, len(SELECTION_PORBABILITY[i])-1)
                 index=SELECTION_PORBABILITY[i][random_index]
 
-        #特别
-        elif QUESTION_TYPE[i] == 4:
-            if len(SELECTION_PORBABILITY[i]) != SELECTION_COUNT[i]:
-                print('选项数量和所填的概率对不上')
-                exit()
-            choices = []
-            for j in range(4):
-                option = probability_index(SELECTION_PORBABILITY[i]) + 1
-                choices.append(option)
-            choices = list(set(choices))
-            index = ','.join(list(map(str, choices)))
         else:
             print('题目单选多选类型填写不对')
             exit()
