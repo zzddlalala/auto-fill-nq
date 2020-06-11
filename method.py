@@ -84,7 +84,6 @@ def probability_data():
             for j in range(SELECTION_COUNT[i]):
                 if multi_check(SELECTION_PORBABILITY[i][j]):
                     choices.append(j+1)
-            choices = list(set(choices))
             index = '|'.join(list(map(str, choices)))
 
         #排序
@@ -110,7 +109,6 @@ def probability_data():
                 option = probability_index(SELECTION_PORBABILITY[i][j]) + 1
                 option_str='{}!{}'.format(j + 1, option)
                 choices.append(option_str)
-            choices = list(set(choices))
             index = ','.join(list(map(str, choices)))
         else:
             print('题目单选多选类型填写不对')
