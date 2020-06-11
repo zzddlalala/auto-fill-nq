@@ -99,7 +99,19 @@ def probability_data():
             else:
                 random_index = randint(0, len(SELECTION_PORBABILITY[i])-1)
                 index=SELECTION_PORBABILITY[i][random_index]
-
+        
+        #矩阵
+        elif QUESTION_TYPE[i] == 4:
+            if len(SELECTION_PORBABILITY[i][0]) != SELECTION_COUNT[i]:
+                print('选项数量和所填的概率对不上')
+                exit()
+            choices = []
+            for j in range(len(SELECTION_PORBABILITY[i])):
+                option = probability_index(SELECTION_PORBABILITY[i][j]) + 1
+                option_str='{}!{}'.format(j + 1, option)
+                choices.append(option_str)
+            choices = list(set(choices))
+            index = ','.join(list(map(str, choices)))
         else:
             print('题目单选多选类型填写不对')
             exit()
