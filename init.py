@@ -1,11 +1,11 @@
 #问卷的ID
-ID = 81789906
+ID = 81594009
 
 #问卷的网址
 WJX_URL = "https://www.wjx.cn/jq/{}.aspx".format(ID)
 
 #回答问卷的次数
-ANSWER_TIMES = 1
+ANSWER_TIMES = 10
 
 #西祠IP代理网址
 IP_URL = 'https://www.xicidaili.com/nn/'
@@ -15,14 +15,14 @@ MODE = 'p'
 
 #概率生成需要填充的常量
 #每一题是单选还是多选，0代表单选，1代表多选,2代表排序，3代表填空,4代表矩阵
-QUESTION_TYPE = [0,0,0,0]
+QUESTION_TYPE = [3]
 
 #每一题有多少个选项
-SELECTION_COUNT = [2,2,2,2]
+SELECTION_COUNT = [0]
 
 #每个选项的概率，是一个二维列表
 SELECTION_PORBABILITY = [
-    [0,100],[0,100],[0,100],[0,100]
+    ["4}2$3}3$2}4$-3}5$-3}6$3}7$5}8$3}9$4}10$3}11$3}12$3}13$3}14$4}15$2}16$2}17$3}18$2}19$4}20$青海大学}21$3}22$2}23$3}24$"]
 ]
 
 #成功数量
