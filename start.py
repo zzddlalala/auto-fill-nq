@@ -49,7 +49,6 @@ class WenJuanXing:
         page = page.content.decode()
         html=etree.HTML(page)
         pools = html.xpath("//tr/td[1]/text()")
-        print('pools===>{}'.format(pools))
         return pools
 
     def Get_IP_XICI(self, ip_url):
@@ -194,7 +193,7 @@ class WenJuanXing:
         """
         for i in range(n):
             if i % 15 == 0:
-                ip_url = IP_URL + str(i // 100 + 1)
+                ip_url = IP_URL + str(i // 15 + 1)
                 print(ip_url)
                 pools = self.Get_IP_KUAI(ip_url)
             time.sleep(1)
