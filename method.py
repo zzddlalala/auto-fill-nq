@@ -110,6 +110,18 @@ def probability_data():
                 option_str='{}!{}'.format(j + 1, option)
                 choices.append(option_str)
             index = ','.join(list(map(str, choices)))
+
+        #多项填空
+        elif QUESTION_TYPE[i] == 5:
+            if len(SELECTION_PORBABILITY[i]) != SELECTION_COUNT[i]:
+                print('选项数量和所填的概率对不上')
+                exit()
+            choices = []
+            for j in range(len(SELECTION_PORBABILITY[i])):
+                random_answer = randint(0, len(SELECTION_PORBABILITY[i][j])-1)
+                answer=SELECTION_PORBABILITY[i][j][random_answer]
+                choices.append(answer)
+            index = '^'.join(list(map(str, choices)))
         else:
             print('题目单选多选类型填写不对')
             exit()
