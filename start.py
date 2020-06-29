@@ -8,6 +8,8 @@ import os
 import method
 import ssl
 from init import (ID, WJX_URL, ANSWER_TIMES, IP_URL, MODE,SUCCESS_TIMES)
+from lxml import etree
+
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
@@ -39,7 +41,18 @@ class WenJuanXing:
             print('需要确定问卷填写的方式')
             exit()
 
-    def Get_IP(self, ip_url):
+    def Get_IP_KUAI(self, ip_url):
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.62 Safari/537.36'
+        }
+        page = requests.get(ip_url, headers=headers)
+        page = page.content.decode()
+        html=etree.HTML(page)
+        pools = html.xpath("//tr/td[1]/text()")
+        print('pools===>{}'.format(pools))
+        return pools
+
+    def Get_IP_XICI(self, ip_url):
         headers = {
             'User-Agent': self.ua.random
         }
@@ -48,7 +61,6 @@ class WenJuanXing:
         reg = r'<td>(.+?)</td>'
         reg = re.compile(reg)
         pools = re.findall(reg, html)[0:499:5]
-        #ip = random.choice(pools)
         return pools
 
     def set_header(self, ip_pools):
@@ -180,12 +192,11 @@ class WenJuanXing:
         填写多次问卷
         :return:
         """
-        pools = self.Get_IP(IP_URL)
         for i in range(n):
-            if i % 100 == 0:
+            if i % 15 == 0:
                 ip_url = IP_URL + str(i // 100 + 1)
                 print(ip_url)
-                pools = self.Get_IP(ip_url)
+                pools = self.Get_IP_KUAI(ip_url)
             time.sleep(1)
             self.run(pools)
             print('第{}次'.format(i+1))
