@@ -192,8 +192,8 @@ class WenJuanXing:
         :return:
         """
         for i in range(n):
-            if i % 15 == 0:
-                ip_url = IP_URL + str(i // 15 + 1)
+            if i % 30 == 0:
+                ip_url = IP_URL + str(i // 30 + 135)
                 print(ip_url)
                 pools = self.Get_IP_KUAI(ip_url)
             time.sleep(1)
