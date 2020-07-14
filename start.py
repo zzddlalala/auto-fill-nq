@@ -193,7 +193,7 @@ class WenJuanXing:
         """
         for i in range(n):
             if i % 30 == 0:
-                ip_url = IP_URL + str(i // 30 + 5)
+                ip_url = IP_URL + str(i // 30 + 7)
                 print(ip_url)
                 pools = self.Get_IP_KUAI(ip_url)
             time.sleep(1)
