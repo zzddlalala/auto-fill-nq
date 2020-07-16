@@ -13,6 +13,13 @@ def probability_index(rate):
             break
     return index
 
+def multi_check(rate):
+    randnum=randint(1,100)
+    if randnum <= rate:
+        return True 
+    else:
+        return False
+        
 def random_data():
     """
             这个函数中生成问卷的结果，可根据问卷结果，随机生成答案
@@ -24,19 +31,15 @@ def random_data():
     post_data = {'submitdata': ""}
 
     for i, q in enumerate(questions):
-
-
-        if i == 15:
-            post_data['submitdata'] += '16' + '$'
-            break
-
-
         '''
-        if i == 23:
-            post_data['submitdata'] += '24' + '$' + '}'
+        if i == 6:
+            post_data['submitdata'] += '7' + '$' + '}'
+            continue
+        if i == 10:
+            post_data['submitdata'] += '11' + '$' + '}'
             continue
         if i == 24:
-            post_data['submitdata'] += '25' + '$' + ''
+            post_data['submitdata'] += '25' + '$' + '}'
             break
         '''
         choices = [t.text for t in q.find('label')]
@@ -52,7 +55,7 @@ def random_data():
 
         post_data['submitdata'] += '{}${}}}'.format(i + 1, random_index)
     # 去除最后一个不合法的`}`
-    #post_data['submitdata'] = post_data['submitdata'][:-1]
+    post_data['submitdata'] = post_data['submitdata'][:-1]
     print(post_data['submitdata'])
 
     return post_data
@@ -78,11 +81,16 @@ def probability_data():
                 print('选项数量和所填的概率对不上')
                 exit()
             choices = []
-            for j in range(randint(1, SELECTION_COUNT[i])):
-                option = probability_index(SELECTION_PORBABILITY[i]) + 1
-                choices.append(option)
-            choices = list(set(choices))
+            for j in range(SELECTION_COUNT[i]):
+                if multi_check(SELECTION_PORBABILITY[i][j]):
+                    choices.append(j+1)
             index = '|'.join(list(map(str, choices)))
+
+        #排序
+        elif QUESTION_TYPE[i] == 2:
+            random.shuffle(SELECTION_PORBABILITY[i])
+            index=','.join(SELECTION_PORBABILITY[i])
+
         #填空
         elif QUESTION_TYPE[i] == 3:
             if len(SELECTION_PORBABILITY[i])==0:
@@ -90,13 +98,37 @@ def probability_data():
             else:
                 random_index = randint(0, len(SELECTION_PORBABILITY[i])-1)
                 index=SELECTION_PORBABILITY[i][random_index]
+        
+        #矩阵
+        elif QUESTION_TYPE[i] == 4:
+            if len(SELECTION_PORBABILITY[i][0]) != SELECTION_COUNT[i]:
+                print('选项数量和所填的概率对不上')
+                exit()
+            choices = []
+            for j in range(len(SELECTION_PORBABILITY[i])):
+                option = probability_index(SELECTION_PORBABILITY[i][j]) + 1
+                option_str='{}!{}'.format(j + 1, option)
+                choices.append(option_str)
+            index = ','.join(list(map(str, choices)))
+
+        #多项填空
+        elif QUESTION_TYPE[i] == 5:
+            if len(SELECTION_PORBABILITY[i]) != SELECTION_COUNT[i]:
+                print('选项数量和所填的概率对不上')
+                exit()
+            choices = []
+            for j in range(len(SELECTION_PORBABILITY[i])):
+                random_answer = randint(0, len(SELECTION_PORBABILITY[i][j])-1)
+                answer=SELECTION_PORBABILITY[i][j][random_answer]
+                choices.append(answer)
+            index = '^'.join(list(map(str, choices)))
         else:
             print('题目单选多选类型填写不对')
             exit()
         post_data['submitdata'] += '{}${}}}'.format(i + 1, index)
 
     post_data['submitdata'] = post_data['submitdata'][:-1]
-    #post_data['submitdata'] += '5'+'$'+'-3}'
+    #post_data['submitdata'] += ',-2,-2,-2,-2'
     print(post_data['submitdata'])
 
     return post_data
